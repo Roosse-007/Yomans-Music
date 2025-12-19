@@ -13,3 +13,4 @@ Project ini merupakan pengembangan web musik yang mendukung:
 Dikembangkan menggunakan Laravel.
 
 Ini hanya untuk tugas Kuliah
+This is just for college assignments
