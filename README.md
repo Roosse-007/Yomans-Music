@@ -8,6 +8,8 @@ Project ini merupakan pengembangan web musik yang mendukung:
 - Upload audio
 - Autentikasi user (JWT)
 - Backend RESTful API
+
 Dikembangkan menggunakan Laravel.
+
 Ini hanya untuk tugas Kuliah
-This is just for college assignments
+(This is just for college assignments)
