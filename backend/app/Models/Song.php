@@ -9,29 +9,17 @@ class Song extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'album_id',
-        'genre_id',
-        'title',
-        'duration',
-        'audio_path'
-    ];
+    protected $fillable = ['album_id','genre_id','title','duration','audio_path'];
 
-    public function album()
+    // Relation
+    public function album() { return $this->belongsTo(Album::class); }
+    public function genre() { return $this->belongsTo(Genre::class); }
+
+    // Auto-accessor untuk frontend
+    protected $appends = ['audio_url'];
+
+    public function getAudioUrlAttribute()
     {
-        return $this->belongsTo(Album::class);
+        return asset('storage/' . $this->audio_path);
     }
-
-    public function genre()
-    {
-        return $this->belongsTo(Genre::class);
-    }
-    
-
-    public function playlists()
-{
-    return $this->belongsToMany(Playlist::class, 'playlist_song')
-                ->withTimestamps();
-}
-
 }
