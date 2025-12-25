@@ -9,42 +9,34 @@ class GenreController extends Controller
 {
     public function index()
     {
-        return response()->json(Genre::all(), 200);
+        return response()->json(Genre::all());
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255'
+        $data = $request->validate([
+            'name' => 'required|string|max:100'
         ]);
-
-        $genre = Genre::create($validated);
-
-        return response()->json($genre, 201);
+        return response()->json(Genre::create($data), 201);
     }
 
     public function show(Genre $genre)
     {
-        return response()->json($genre, 200);
+        return response()->json($genre);
     }
 
     public function update(Request $request, Genre $genre)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255'
+        $data = $request->validate([
+            'name' => 'required|string|max:100'
         ]);
-
-        $genre->update($validated);
-
-        return response()->json($genre, 200);
+        $genre->update($data);
+        return response()->json($genre);
     }
 
     public function destroy(Genre $genre)
     {
         $genre->delete();
-
-        return response()->json([
-            'message' => 'Genre deleted successfully'
-        ], 200);
+        return response()->json(['message' => 'Genre deleted']);
     }
 }
