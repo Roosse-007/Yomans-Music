@@ -9,12 +9,14 @@ class Song extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'album_id',
-        'genre_id',
-        'duration'
-    ];
+   protected $fillable = [
+    'album_id',
+    'genre_id',
+    'title',
+    'duration',
+    'audio_path'
+];
+
 
     public function album()
     {
