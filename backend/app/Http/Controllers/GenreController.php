@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Genre;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class GenreController extends Controller
     public function store(Request $request)
     {
         return Genre::create(
-            $request->validate(['name' => 'required'])
+            $request->validate(['name' => 'required|string'])
         );
     }
 
@@ -26,7 +27,7 @@ class GenreController extends Controller
 
     public function update(Request $request, Genre $genre)
     {
-        $genre->update($request->all());
+        $genre->update($request->only('name'));
         return $genre;
     }
 

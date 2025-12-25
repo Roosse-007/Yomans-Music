@@ -8,22 +8,15 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('songs', function (Blueprint $table) {
-            $table->id();
+    $table->id();
+    $table->foreignId('album_id')->constrained()->cascadeOnDelete();
+    $table->foreignId('genre_id')->constrained()->cascadeOnDelete();
+    $table->string('title');
+    $table->integer('duration');
+    $table->string('audio_path');
+    $table->timestamps();
+});
 
-            $table->foreignId('album_id')
-                  ->constrained('albums')
-                  ->cascadeOnDelete();
-
-            $table->foreignId('genre_id')
-                  ->constrained('genres')
-                  ->cascadeOnDelete();
-
-            $table->string('title');
-            $table->integer('duration');
-            $table->string('audio_path');
-
-            $table->timestamps();
-        });
     }
 
     public function down(): void

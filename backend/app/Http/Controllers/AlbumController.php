@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Album;
 use Illuminate\Http\Request;
 
@@ -14,13 +15,12 @@ class AlbumController extends Controller
 
     public function store(Request $request)
     {
-        return Album::create(
-            $request->validate([
-                'title' => 'required',
-                'artist_id' => 'required|exists:artists,id',
-                'release_date' => 'nullable|date'
-            ])
-        );
+        $data = $request->validate([
+            'title' => 'required|string',
+            'artist_id' => 'required|exists:artists,id',
+        ]);
+
+        return Album::create($data);
     }
 
     public function show(Album $album)
@@ -30,7 +30,7 @@ class AlbumController extends Controller
 
     public function update(Request $request, Album $album)
     {
-        $album->update($request->all());
+        $album->update($request->only('title', 'artist_id'));
         return $album;
     }
 

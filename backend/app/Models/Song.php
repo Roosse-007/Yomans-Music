@@ -9,14 +9,13 @@ class Song extends Model
 {
     use HasFactory;
 
-   protected $fillable = [
-    'album_id',
-    'genre_id',
-    'title',
-    'duration',
-    'audio_path'
-];
-
+    protected $fillable = [
+        'album_id',
+        'genre_id',
+        'title',
+        'duration',
+        'audio_path'
+    ];
 
     public function album()
     {
@@ -27,4 +26,12 @@ class Song extends Model
     {
         return $this->belongsTo(Genre::class);
     }
+    
+
+    public function playlists()
+{
+    return $this->belongsToMany(Playlist::class, 'playlist_song')
+                ->withTimestamps();
+}
+
 }
