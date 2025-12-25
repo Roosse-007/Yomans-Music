@@ -12,9 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('albums', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+    $table->id();
+    $table->string('title');
+    $table->foreignId('artist_id')->constrained()->cascadeOnDelete();
+    $table->year('release_year')->nullable();
+    $table->timestamps();
+});
+
     }
 
     /**
