@@ -80,6 +80,53 @@ Route::middleware(['auth:web', 'admin'])
     ->prefix('admin')
     ->group(function () {
 
+     Route::get('/artists/create', function () {
+        return view('admin.create-artist');
+    })->name('admin.artists.create');
+
+    // SIMPAN ARTIS
+    Route::post('/artists', [AdminArtistController::class, 'store'])
+        ->name('admin.artists.store');
+
+    // FORM EDIT ARTIS
+    Route::get('/artists/{artist}/edit', [AdminArtistController::class, 'edit'])
+        ->name('admin.artists.edit');
+
+    // UPDATE ARTIS
+    Route::put('/artists/{artist}', [AdminArtistController::class, 'update'])
+        ->name('admin.artists.update');
+
+    // HAPUS ARTIS + LAGU + FILE
+    Route::delete('/artists/{artist}', function (\App\Models\Artist $artist) {
+
+    // pastikan relasi di-load sebagai collection
+    $artist->load('albums.songs');
+
+    foreach ($artist->albums ?? [] as $album) {
+
+        foreach ($album->songs ?? [] as $song) {
+
+            if ($song->audio_path && Storage::disk('public')->exists($song->audio_path)) {
+                Storage::disk('public')->delete($song->audio_path);
+            }
+
+            $song->delete();
+        }
+
+        $album->delete();
+    }
+
+    // hapus foto artis
+    if ($artist->photo && Storage::disk('public')->exists($artist->photo)) {
+        Storage::disk('public')->delete($artist->photo);
+    }
+
+    $artist->delete();
+
+    return redirect('/admin')
+        ->with('success', 'Artis dan seluruh lagunya berhasil dihapus');
+})->name('admin.artists.destroy');
+
     /* =========================
        DASHBOARD ADMIN
     ========================= */
@@ -208,52 +255,7 @@ Route::delete('/albums/{album}', function (\App\Models\Album $album) {
     ========================= */
 
     // FORM TAMBAH ARTIS
-    Route::get('/artists/create', function () {
-        return view('admin.create-artist');
-    })->name('admin.artists.create');
-
-    // SIMPAN ARTIS
-    Route::post('/artists', [AdminArtistController::class, 'store'])
-        ->name('admin.artists.store');
-
-    // FORM EDIT ARTIS
-    Route::get('/artists/{artist}/edit', [AdminArtistController::class, 'edit'])
-        ->name('admin.artists.edit');
-
-    // UPDATE ARTIS
-    Route::put('/artists/{artist}', [AdminArtistController::class, 'update'])
-        ->name('admin.artists.update');
-
-    // HAPUS ARTIS + LAGU + FILE
-    Route::delete('/artists/{artist}', function (\App\Models\Artist $artist) {
-
-    // pastikan relasi di-load sebagai collection
-    $artist->load('albums.songs');
-
-    foreach ($artist->albums ?? [] as $album) {
-
-        foreach ($album->songs ?? [] as $song) {
-
-            if ($song->audio_path && Storage::disk('public')->exists($song->audio_path)) {
-                Storage::disk('public')->delete($song->audio_path);
-            }
-
-            $song->delete();
-        }
-
-        $album->delete();
-    }
-
-    // hapus foto artis
-    if ($artist->photo && Storage::disk('public')->exists($artist->photo)) {
-        Storage::disk('public')->delete($artist->photo);
-    }
-
-    $artist->delete();
-
-    return redirect('/admin')
-        ->with('success', 'Artis dan seluruh lagunya berhasil dihapus');
-})->name('admin.artists.destroy');
+   
 
 });
 

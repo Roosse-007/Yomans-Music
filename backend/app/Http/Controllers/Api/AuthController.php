@@ -39,27 +39,30 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
+{
+    $request->validate([
+        'email'    => 'required|email',
+        'password' => 'required'
+    ]);
 
-        if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json([
-                'message' => 'Invalid credentials'
-            ], 401);
-        }
+    $credentials = $request->only('email', 'password');
 
-        // ✅ LOG LOGIN
-        activity_log(
-            'LOGIN',
-            'AUTH',
-            'User berhasil login: ' . auth('api')->user()->email
-        );
-
+    if (!$token = auth('api')->attempt($credentials)) {
         return response()->json([
-            'token' => $token,
-            'token_type' => 'bearer'
-        ]);
+            'success' => false,
+            'message' => 'Email atau password salah'
+        ], 401);
     }
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Login berhasil',
+        'token'   => $token,
+        'type'    => 'bearer',
+        'expires' => auth('api')->factory()->getTTL() * 60
+    ]);
+}
+
 
     public function me()
     {
