@@ -9,19 +9,11 @@ return new class extends Migration {
     {
         Schema::create('songs', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('album_id')
-                  ->constrained('albums')
-                  ->cascadeOnDelete();
-
-            $table->foreignId('genre_id')
-                  ->constrained('genres')
-                  ->cascadeOnDelete();
-
+            $table->foreignId('album_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('genre_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->integer('duration');
             $table->string('audio_path');
-
             $table->timestamps();
         });
     }

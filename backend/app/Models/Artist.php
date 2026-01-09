@@ -2,17 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Artist extends Model
 {
-    use HasFactory;
+    protected $fillable = ['name', 'photo'];
 
-    protected $fillable = ['name', 'bio'];
+    protected $appends = ['photo_url'];
+
+    public function getPhotoUrlAttribute()
+    {
+        return asset('storage/' . $this->photo);
+    }
 
     public function albums()
-    {
-        return $this->hasMany(Album::class);
-    }
+{
+    return $this->hasMany(\App\Models\Album::class);
+}
+
 }

@@ -10,13 +10,15 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('artists', function (Blueprint $table) {
-    $table->id();
-    $table->string('name');
-    $table->text('bio')->nullable();
-    $table->timestamps();
-});
+{
+    Schema::create('artists', function (Blueprint $table) {
+        $table->id();
+        $table->string('name');
+        $table->string('photo')->nullable(); // otomatis setelah name
+        $table->text('bio')->nullable();
+        $table->timestamps();
+    });
+
 
     }
 
