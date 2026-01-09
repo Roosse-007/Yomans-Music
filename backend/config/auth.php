@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-    'guard' => 'api',
+    'guard' => 'web',
 ],
 
     /*
@@ -35,11 +35,18 @@ return [
     */
 
     'guards' => [
+
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
+    ],
+
     'api' => [
         'driver' => 'jwt',
         'provider' => 'users',
     ],
 ],
+
 
 
     /*

@@ -11,7 +11,16 @@ class PlaylistController extends Controller
 {
     public function index()
     {
-        return Auth::user()->playlists()->with('songs')->get();
+        activity_log(
+            'VIEW',
+            'PLAYLIST',
+            'Melihat daftar playlist'
+        );
+
+        return response()->json([
+            'success' => true,
+            'data' => Auth::user()->playlists()->with('songs')->get()
+        ], 200);
     }
 
     public function store(Request $request)
@@ -21,27 +30,66 @@ class PlaylistController extends Controller
             'description' => 'nullable|string'
         ]);
 
-        return Auth::user()->playlists()->create($data);
+        $playlist = Auth::user()->playlists()->create($data);
+
+        activity_log(
+            'CREATE',
+            'PLAYLIST',
+            'Membuat playlist: ' . $playlist->name
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Playlist created',
+            'data' => $playlist
+        ], 201);
     }
 
     public function show(Playlist $playlist)
-    {
-        $this->authorize('view', $playlist);
-        return $playlist->load('songs');
-    }
+{
+    activity_log(
+        'VIEW',
+        'PLAYLIST',
+        'Melihat playlist ID ' . $playlist->id
+    );
 
-    public function update(Request $request, Playlist $playlist)
-    {
-        $this->authorize('update', $playlist);
-        $playlist->update($request->only('name', 'description'));
-        return $playlist;
-    }
+    return response()->json([
+        'success' => true,
+        'data' => $playlist->load('songs')
+    ], 200);
+}
 
-    public function destroy(Playlist $playlist)
-    {
-        $this->authorize('delete', $playlist);
-        $playlist->delete();
+public function update(Request $request, Playlist $playlist)
+{
+    $playlist->update($request->only('name', 'description'));
 
-        return response()->json(['message' => 'Playlist deleted']);
-    }
+    activity_log(
+        'UPDATE',
+        'PLAYLIST',
+        'Update playlist ID ' . $playlist->id
+    );
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Playlist updated',
+        'data' => $playlist
+    ], 200);
+}
+
+public function destroy(Playlist $playlist)
+{
+    $playlist->delete();
+
+    activity_log(
+        'DELETE',
+        'PLAYLIST',
+        'Hapus playlist: ' . $playlist->name
+    );
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Playlist deleted'
+    ], 200);
+}
+
 }

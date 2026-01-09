@@ -24,6 +24,13 @@ class AuthController extends Controller
             'password' => bcrypt($request->password)
         ]);
 
+        // ✅ LOG REGISTER
+        activity_log(
+            'REGISTER',
+            'AUTH',
+            'User mendaftar akun baru: ' . $user->email
+        );
+
         return response()->json([
             'success' => true,
             'message' => 'Register success',
@@ -35,15 +42,20 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (! $token = JWTAuth::attempt($credentials)) {
+        if (! $token = auth('api')->attempt($credentials)) {
             return response()->json([
-                'success' => false,
                 'message' => 'Invalid credentials'
             ], 401);
         }
 
+        // ✅ LOG LOGIN
+        activity_log(
+            'LOGIN',
+            'AUTH',
+            'User berhasil login: ' . auth('api')->user()->email
+        );
+
         return response()->json([
-            'success' => true,
             'token' => $token,
             'token_type' => 'bearer'
         ]);
@@ -53,13 +65,20 @@ class AuthController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => auth()->user()
+            'data' => auth('api')->user()
         ]);
     }
 
     public function logout()
     {
-        JWTAuth::invalidate(JWTAuth::getToken());
+        // ✅ LOG LOGOUT
+        activity_log(
+            'LOGOUT',
+            'AUTH',
+            'User logout'
+        );
+
+        auth('api')->logout();
 
         return response()->json([
             'success' => true,

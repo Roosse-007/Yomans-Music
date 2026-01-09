@@ -9,10 +9,6 @@ class PlaylistSeeder extends Seeder
 {
     public function run(): void
     {
-        Playlist::create([
-            'user_id' => 1,
-            'name' => 'My Favorite Songs',
-            'description' => 'Seeder playlist example'
-        ]);
+      
     }
 }

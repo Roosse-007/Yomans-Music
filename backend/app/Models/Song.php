@@ -18,8 +18,9 @@ class Song extends Model
     // Auto-accessor untuk frontend
     protected $appends = ['audio_url'];
 
-    public function getAudioUrlAttribute()
-    {
-        return asset('storage/' . $this->audio_path);
-    }
+public function getAudioUrlAttribute()
+{
+    return asset('storage/' . $this->audio_path);
+}
+
 }
