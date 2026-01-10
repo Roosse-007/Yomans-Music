@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Song;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 class SongController extends Controller
 {
@@ -111,9 +113,11 @@ class SongController extends Controller
     if ($request->hasFile('audio')) {
 
         // hapus audio lama
-        if ($song->audio_path && \Storage::disk('public')->exists($song->audio_path)) {
-            \Storage::disk('public')->delete($song->audio_path);
-        }
+        // hapus audio lama
+if ($song->audio_path && Storage::disk('public')->exists($song->audio_path)) {
+    Storage::disk('public')->delete($song->audio_path);
+}
+
 
         // simpan audio baru
         $path = $request->file('audio')->store('songs', 'public');
