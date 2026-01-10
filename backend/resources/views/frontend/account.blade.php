@@ -7,49 +7,120 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: linear-gradient(180deg, #0d0d0d, #000);
+      color: #fff;
+    }
+
+    .account-wrapper {
+      max-width: 520px;
+      margin: auto;
+    }
+
+    .main-card {
+      background: rgba(0,0,0,0.85);
+      border-radius: 18px;
+      padding: 32px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    }
+
+    .profile-card {
+      width: 150px;
+      margin: auto;
+      background: #111;
+      border-radius: 16px;
+    }
+
+    .profile-card img {
+      width: 96px;
+      height: 96px;
+      object-fit: cover;
+    }
+
+    .section {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 20px;
+      margin-top: 20px;
+    }
+
+    .label {
+      font-size: 0.8rem;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .value {
+      font-size: 1rem;
+      color: #eee;
+    }
+
+    .upload-input {
+      background: #111;
+      border: 1px dashed #444;
+      color: #ccc;
+    }
+
+    .upload-input::file-selector-button {
+      background: #222;
+      border: none;
+      color: #fff;
+      padding: 6px 12px;
+      margin-right: 10px;
+    }
+
+    .upload-input:hover {
+      border-color: #666;
+    }
+
+    .logout-card {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .logout-card:hover {
+      background: #161616;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255,255,255,0.05);
+    }
+  </style>
 </head>
 
-<body class="bg-dark text-white">
+<body>
 
 @include('frontend.navbar')
 
-<div class="container mt-5">
+<div class="container py-5">
+  <div class="account-wrapper">
 
-  <h2 class="mb-4">👤 Akun Saya</h2>
+    <h3 class="text-center mb-4">Akun Saya</h3>
 
-  @auth
-    <div class="card bg-black text-white p-4">
+    @auth
+    <div class="main-card">
 
-      {{-- ✅ TAMBAHAN FOTO PROFIL (TANPA UBAH TAMPILAN LAIN) --}}
-      <div class="card bg-dark border-0 shadow-sm mx-auto mb-4" style="width:160px;">
-  <div class="card-body text-center p-3">
+      <!-- FOTO PROFIL -->
+      <div class="profile-card text-center p-3 mb-4">
+        <img
+          src="{{ auth()->user()->photo
+              ? asset('storage/' . auth()->user()->photo) . '?v=' . time()
+              : asset('storage/img/avatardef.jpg') }}"
+          class="rounded-circle border border-secondary mb-2"
+        >
+        <div class="small text-secondary">Foto Profil</div>
+      </div>
 
-    <img
-  src="{{ auth()->user()->photo
-      ? asset('storage/' . auth()->user()->photo) . '?v=' . time()
-      : asset('storage/img/avatardef.jpg') }}"
-
-      width="88"
-      height="88"
-      class="rounded-circle border border-secondary mb-2"
-      style="object-fit:cover"
-    >
-
-    <div class="small text-secondary">
-      Foto Profil
-    </div>
-
-  </div>
-</div>
-
-
-      {{-- ✅ OPSI GANTI FOTO --}}
-      <form action="/account/update-photo" method="POST" enctype="multipart/form-data" class="mb-4">
+      <!-- GANTI FOTO -->
+      <form action="/account/update-photo" method="POST" enctype="multipart/form-data">
         @csrf
         <input
           type="file"
           name="photo"
-          class="form-control mb-2"
+          class="form-control upload-input mb-2"
           accept="image/*"
           required
         >
@@ -58,45 +129,51 @@
         </button>
       </form>
 
-      {{-- ================= ISI LAMA (TIDAK DIUBAH) ================= --}}
+      <!-- INFO AKUN -->
+      <div class="section">
+        <div class="mb-3">
+          <div class="label">Nama</div>
+          <div class="value">{{ auth()->user()->name }}</div>
+        </div>
 
-      <div class="mb-3">
-        <strong>Nama</strong>
-        <div class="text-secondary">
-          {{ auth()->user()->name }}
+        <div class="mb-3">
+          <div class="label">Email</div>
+          <div class="value">{{ auth()->user()->email }}</div>
+        </div>
+
+        <div>
+          <div class="label">Bergabung Sejak</div>
+          <div class="value">
+            {{ optional(auth()->user()->created_at)->format('d M Y') ?? '-' }}
+          </div>
         </div>
       </div>
 
-      <div class="mb-3">
-        <strong>Email</strong>
-        <div class="text-secondary">
-          {{ auth()->user()->email }}
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <strong>Bergabung sejak</strong>
-        <div class="text-secondary">
-          {{ optional(auth()->user()->created_at)->format('d M Y') ?? '-' }}
-        </div>
-      </div>
-
-      <form action="/logout" method="POST">
+      <!-- GANTI AKUN -->
+      <form action="/logout" method="POST" class="mt-4">
         @csrf
-        <button class="btn btn-danger mt-3">
-          🚪 Logout
-        </button>
+        <div class="logout-card p-3 d-flex align-items-center justify-content-between"
+             onclick="this.closest('form').submit()">
+          <div>
+            <div class="fw-semibold">Ganti Akun</div>
+            <div class="small text-secondary">
+              Logout dan kembali ke halaman login
+            </div>
+          </div>
+          <span class="fs-4">⟲</span>
+        </div>
       </form>
 
     </div>
-  @endauth
+    @endauth
 
-  @guest
-    <div class="alert alert-warning">
-      Silakan login untuk melihat halaman akun.
-    </div>
-  @endguest
+    @guest
+      <div class="alert alert-warning text-center">
+        Silakan login untuk melihat halaman akun.
+      </div>
+    @endguest
 
+  </div>
 </div>
 
 </body>

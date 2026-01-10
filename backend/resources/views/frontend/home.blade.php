@@ -31,11 +31,12 @@
 <div class="container-md">
 
 <!-- ================= NAVBAR ================= -->
+<!-- ================= NAVBAR ================= -->
 <nav class="navbar navbar-expand-lg bg-dark navbar-dark mt-3 rounded px-3">
   <div class="container-fluid">
 
-    <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-      <img src="{{ asset('storage/img/logo.jpg') }}" height="40">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('home') }}">
+      <img src="{{ asset('storage/img/YM.jpg') }}" height="40">
       <div class="brand-text d-flex flex-column">
         <span>Yomans</span>
         <span>Music</span>
@@ -52,25 +53,57 @@
     </form>
 
     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-3">
+
       <li class="nav-item">
-        <a class="nav-link active" href="http://127.0.0.1:8000/">Beranda</a>
+        <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}"
+           href="{{ route('home') }}">
+          Beranda
+        </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="http://127.0.0.1:8000/favorites">Favorit</a>
+        <a class="nav-link {{ request()->routeIs('favorites*') ? 'active' : '' }}"
+           href="{{ route('favorites') }}">
+          Favorit
+        </a>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="http://127.0.0.1:8000/login">Login</a>
-      </li>
+      {{-- 🔐 ADMIN MENU --}}
+      @auth
+        @if(auth()->user()->role === 'admin')
+          <li class="nav-item">
+            <a class="nav-link text-warning fw-bold"
+               href="{{ route('admin.dashboard') }}">
+              <i class="bi bi-speedometer2"></i> Admin
+            </a>
+          </li>
+        @endif
+      @endauth
 
-      <li class="nav-item">
-        <a class="nav-link" href="http://127.0.0.1:8000/account">Akun</a>
-      </li>
+      @guest
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('login') }}">Login</a>
+        </li>
+      @else
+        <li class="nav-item d-flex align-items-center gap-2">
+          <img
+            src="{{ auth()->user()->photo
+              ? asset('storage/' . auth()->user()->photo)
+              : asset('storage/img/avatardef.jpg') }}"
+            class="user-photo-xs"
+          >
+          <a class="nav-link fw-semibold p-0"
+             href="{{ route('account') }}">
+            {{ auth()->user()->name }}
+          </a>
+        </li>
+      @endguest
+
     </ul>
 
   </div>
 </nav>
+
 
 <!-- ================= BANNER CAROUSEL ================= -->
 <div id="bannerCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
@@ -126,6 +159,23 @@
 
   </div>
 
+  @auth
+@if(auth()->user()->role === 'admin')
+<div class="alert alert-warning mt-4 d-flex justify-content-between align-items-center">
+  <div>
+    <strong>👑 Admin Mode Aktif</strong><br>
+    Kelola artis, lagu, dan album dari dashboard
+  </div>
+
+  <a href="{{ route('admin.dashboard') }}"
+     class="btn btn-dark">
+     Masuk Dashboard
+  </a>
+</div>
+@endif
+@endauth
+
+
   <!-- CONTROL -->
   <!-- <button class="carousel-control-prev" type="button"
           data-bs-target="#bannerCarousel" data-bs-slide="prev">
@@ -149,13 +199,13 @@
       data-artist-id="{{ $artist->id }}"
       data-artist-image="{{ $artist->photo
           ? asset('storage/' . $artist->photo)
-          : asset('storage/img/artist-default.png') }}"
+          : asset('storage/img/YM.jpg') }}"
     >
 
       <img
         src="{{ $artist->photo
             ? asset('storage/' . $artist->photo)
-            : asset('storage/img/artist-default.png') }}"
+            : asset('storage/img/YM.jpg') }}"
       >
 
       <h2>{{ $artist->name }}</h2>

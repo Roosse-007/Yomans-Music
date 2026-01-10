@@ -18,7 +18,7 @@
   <div class="container-fluid">
 
     <a class="navbar-brand d-flex align-items-center gap-2" href="/">
-      <img src="{{ asset('storage/img/logo.jpg') }}" height="40">
+      <img src="{{ asset('storage/img/YM.jpg') }}" height="40">
       <div class="brand-text d-flex flex-column">
         <span>Yomans</span>
         <span>Music</span>
@@ -44,22 +44,35 @@
         <a class="nav-link" href="/favorites">Favorit</a>
       </li>
 
-      @auth
-        <li class="nav-item">
-          <a class="nav-link" href="/account">
-            {{ auth()->user()->name }}
-          </a>
-        </li>
+     @auth
+  <li class="nav-item d-flex align-items-center gap-2">
 
-        <li class="nav-item">
-          <form action="/logout" method="POST">
-            @csrf
-            <button class="btn btn-link nav-link text-danger">
-              Logout
-            </button>
-          </form>
-        </li>
-      @endauth
+    {{-- FOTO USER KECIL --}}
+    <img
+      src="{{ auth()->user()->photo
+        ? asset('storage/' . auth()->user()->photo)
+        : asset('storage/img/avatardef.jpg') }}"
+      class="user-photo-xs"
+      alt="User Photo"
+    >
+
+    {{-- NAMA USER (TIDAK DIUBAH) --}}
+    <a class="nav-link p-0" href="/account">
+      {{ auth()->user()->name }}
+    </a>
+
+  </li>
+
+  <li class="nav-item">
+    <form action="/logout" method="POST">
+      @csrf
+      <button class="btn btn-link nav-link text-danger">
+        Logout
+      </button>
+    </form>
+  </li>
+@endauth
+
 
       @guest
         <li class="nav-item">

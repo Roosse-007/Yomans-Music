@@ -8,7 +8,15 @@
 
 <div class="container mt-5">
 
-  <h2 class="mb-4">🎧 Admin Panel</h2>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>🎧 Admin Panel</h2>
+
+  <a href="{{ route('home') }}"
+     class="btn btn-outline-light">
+     Home
+  </a>
+</div>
+
 
   <div class="mb-4 d-flex gap-2 flex-wrap">
       <a href="/admin/songs/create" class="btn btn-success">
