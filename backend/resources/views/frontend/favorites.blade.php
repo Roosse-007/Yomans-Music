@@ -218,7 +218,7 @@ small {
 </head>
 
 <body>
-
+@include('frontend.navbar')
 <div class="container-md mt-5 mb-5 pb-5">
   <h3 class="mb-4">Lagu Favorit</h3>
 

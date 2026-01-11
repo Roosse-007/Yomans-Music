@@ -88,15 +88,40 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(255,255,255,0.05);
     }
+
+    .logout-card.text-danger {
+  border-color: rgba(255,80,80,0.4);
+}
+
+.logout-card.text-danger:hover {
+  background: rgba(255,0,0,0.05);
+  box-shadow: 0 10px 25px rgba(255,0,0,0.15);
+}
+.account-actions {
+  margin-top: 28px;
+}
+
+    
   </style>
 </head>
 
 <body>
 
-@include('frontend.navbar')
 
 <div class="container py-5">
   <div class="account-wrapper">
+
+  <div class="d-flex gap-2 mb-4">
+  <a href="{{ route('home') }}" class="btn btn-outline-light">
+    ← Beranda
+  </a>
+
+  <a href="{{ route('favorites') }}" class="btn btn-outline-light">
+    ♫ Favorit
+  </a>
+</div>
+
+
 
     <h3 class="text-center mb-4">Akun Saya</h3>
 
@@ -130,39 +155,58 @@
       </form>
 
       <!-- INFO AKUN -->
-      <div class="section">
-        <div class="mb-3">
-          <div class="label">Nama</div>
-          <div class="value">{{ auth()->user()->name }}</div>
-        </div>
+<div class="section mt-4">
+  <div class="mb-3">
+    <div class="label">Nama</div>
+    <div class="value">{{ auth()->user()->name }}</div>
+  </div>
 
-        <div class="mb-3">
-          <div class="label">Email</div>
-          <div class="value">{{ auth()->user()->email }}</div>
-        </div>
+  <div class="mb-3">
+    <div class="label">Email</div>
+    <div class="value">{{ auth()->user()->email }}</div>
+  </div>
 
-        <div>
-          <div class="label">Bergabung Sejak</div>
-          <div class="value">
-            {{ optional(auth()->user()->created_at)->format('d M Y') ?? '-' }}
-          </div>
+  <div>
+    <div class="label">Bergabung Sejak</div>
+    <div class="value">
+      {{ optional(auth()->user()->created_at)->format('d M Y') ?? '-' }}
+    </div>
+  </div>
+</div>
+
+<!-- ACTION AKUN -->
+<div class="section mt-4">
+
+  <!-- GANTI AKUN -->
+  <form action="/logout" method="POST" class="mb-3">
+    @csrf
+    <div class="logout-card p-3 d-flex align-items-center justify-content-between"
+         onclick="this.closest('form').submit()">
+      <div>
+        <div class="fw-semibold">Ganti Akun</div>
+        <div class="small text-secondary">
+          Logout dan masuk dengan akun lain
         </div>
       </div>
+      <span class="fs-4">⟲</span>
+    </div>
+  </form>
 
-      <!-- GANTI AKUN -->
-      <form action="/logout" method="POST" class="mt-4">
-        @csrf
-        <div class="logout-card p-3 d-flex align-items-center justify-content-between"
-             onclick="this.closest('form').submit()">
-          <div>
-            <div class="fw-semibold">Ganti Akun</div>
-            <div class="small text-secondary">
-              Logout dan kembali ke halaman login
-            </div>
-          </div>
-          <span class="fs-4">⟲</span>
+  <!-- LOGOUT -->
+  <form action="/logout" method="POST">
+    @csrf
+    <div class="logout-card p-3 d-flex align-items-center justify-content-between text-danger"
+         onclick="this.closest('form').submit()">
+      <div>
+        <div class="fw-semibold">Logout</div>
+        <div class="small text-secondary">
+          Keluar dari akun ini
         </div>
-      </form>
+      </div>
+      <span class="fs-4">⎋</span>
+    </div>
+  </form>
+
 
     </div>
     @endauth
