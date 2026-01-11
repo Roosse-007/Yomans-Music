@@ -88,4 +88,34 @@ class AuthController extends Controller
             'message' => 'Logout success'
         ]);
     }
+
+    public function refresh()
+    {
+        try {
+            $token = JWTAuth::getToken();
+
+            if (!$token) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Token tidak ditemukan'
+                ], 401);
+            }
+
+            $newToken = JWTAuth::refresh($token);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Token berhasil diperbarui',
+                'token'   => $newToken,
+                'type'    => 'bearer',
+                'expires' => auth('api')->factory()->getTTL() * 60
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token tidak valid atau sudah expired'
+            ], 401);
+        }
+    }
 }

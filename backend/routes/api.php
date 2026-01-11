@@ -39,6 +39,7 @@ Route::prefix('v1')->group(function () {
         /* ===== USER ===== */
         Route::get('/me',     [AuthController::class, 'me']);
         Route::post('/logout',[AuthController::class, 'logout']);
+        Route::post('/refresh',[AuthController::class, 'refresh']);
 
         /* ===== ARTIST ===== */
         Route::post('/artists',               [ArtistController::class, 'store']);
