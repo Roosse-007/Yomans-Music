@@ -321,20 +321,10 @@ if (Auth::guard('api')->user()->role !== 'admin') {
 
 ---
 
-## 📌 Pengembangan Selanjutnya
-
-* Logging semua HTTP Method (GET, POST, PUT, DELETE)
-* Playlist multi-kategori
-* Like counter lagu
-* Admin dashboard
-
----
-
 ## 👨‍💻 Developer
-
-**Farhan Ismail**
-Mahasiswa & Backend Developer
-Project UAS / Final Project Laravel API
+Russependhy ikhtiar & Farhan ismail
+Mahasiswa universitas bumigora
+Project UAS 
 
 ---
 
