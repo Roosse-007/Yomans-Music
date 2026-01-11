@@ -318,7 +318,7 @@
     </div>
   </div>
 </div>
-
+<audio id="audioPlayer" preload="metadata"></audio>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ asset('storage/js/player.js') }}"></script>
 <script src="{{ asset('storage/js/app.js') }}"></script>

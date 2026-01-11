@@ -97,6 +97,15 @@
             font-weight: 600;
             letter-spacing: .4px;
         }
+        /* Cursor telunjuk */
+button,
+a,
+.icon-btn,
+.action-btn,
+.artist-card {
+    cursor: pointer;
+}
+
     </style>
 </head>
 
