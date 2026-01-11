@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\ArtistController;
 use App\Http\Controllers\Admin\ArtistController as AdminArtistController;
 use App\Http\Controllers\Admin\SongController;
 use App\Http\Controllers\Admin\AlbumController;
+use App\Http\Controllers\Web\FavoritePageController;
+
 
 use App\Models\Artist;
 use App\Models\Song;
@@ -264,7 +266,8 @@ Route::delete('/albums/{album}', function (\App\Models\Album $album) {
 ========================= */
 Route::middleware('auth:web')->group(function () {
 
-    Route::get('/favorites', fn () => view('frontend.favorites'))
+    
+    Route::get('/favorites', [FavoritePageController::class, 'index'])
         ->name('favorites');
 
     Route::get('/account', fn () => view('frontend.account'))

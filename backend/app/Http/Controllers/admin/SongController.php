@@ -79,12 +79,16 @@ class SongController extends Controller
      * ============================
      */
     public function edit(Song $song)
-    {
-        return view('admin.songs.edit', [
-            'song'    => $song,
-            'genres'  => Genre::all()
-        ]);
-    }
+{
+    return view()->file(
+        resource_path('views/admin/songs.edit.blade.php'),
+        [
+            'song'   => $song,
+            'albums' => Album::with('artist')->get(),
+            'genres' => Genre::all(),
+        ]
+    );
+}
 
     /**
      * ============================
